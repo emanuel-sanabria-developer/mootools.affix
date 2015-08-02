@@ -1,0 +1,2 @@
+# mootools.affix
+Mootools.Affix
