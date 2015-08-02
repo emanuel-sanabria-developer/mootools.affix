@@ -1,0 +1,9 @@
+header {
+	background: #101010;
+}
+
+#the-row {
+	background: red;
+	z-index: 1;
+	top: 20px;
+}
