@@ -1,5 +1,5 @@
 /* ========================================================================
- * This is a kinda a port for Mootools of the original Boostrap affix.js jQuery plugin
+ * This is a port for Mootools of Boostrap's affix.js jQuery plugin VERSION 3.3.5
  * TODO: add an acctual attribution msg
  * 
  * ======================================================================== */
@@ -11,8 +11,7 @@
     
     Implements: [Options, Events],
     
-    VERSION: '3.3.5',
-    _RESET: 'affix-top affix',
+    VERSION: '1.0.0',
     
     options: {
       offset: 0,
@@ -36,9 +35,6 @@
       self.unpin = null;
       self.pinnedOffest = null;
       self.$body = document.getElement('body');
-      this.$winScroll = new Fx.Scroll(window, {
-        duration: 500
-      });
 
       self.checkPosition();
     },
@@ -71,7 +67,7 @@
 
       if (offsetBottom != null && (colliderTop + colliderHeight >= scrollHeight - offsetBottom)) {
         return 'bottom';
-      } 
+      }
 
       return false
     },
@@ -83,7 +79,7 @@
         return self.pinnedOffset;
       }
 
-      self.$element.removeClass(self._RESET)
+      self.resetClasses();
       self.$element.addClass('affix');
       var scrollTop = self.$target.getScroll().y;
       var position  = self.$element.getPosition();
@@ -92,7 +88,8 @@
     },
 
     checkPositionWithEventLoop: function () {
-      setTimeout(self.checkPosition, 1);
+      var self = this;
+      setTimeout(self.checkPosition.bind(this), 1);
     },
 
     checkPosition: function () {
@@ -136,7 +133,7 @@
         self.affixed = affix;
         self.unpin = affix == 'bottom' ? self.getPinnedOffset() : null;
 
-        self.$element.removeClass(self._RESET);
+        self.resetClasses();
         self.$element.addClass(affixType);
       }
 
@@ -147,17 +144,21 @@
       }
     },
 
+    resetClasses: function() {
+      this.$element.removeClass('affix');
+      this.$element.removeClass('affix-top');
+      this.$element.removeClass('affix-bottom');
+    },
+
     onDisabled: function(callback) {
       var self = this;
 
       if (typeof callback === 'function') {
         callback();
       } else {
-        self.$winScroll.toTop();
-
-        setTimeout(function() {
-          self.$element.removeClass(self._RESET);
-        }, 600);
+        self.$target.scrollTo(0, 0);
+        self.resetClasses();
+        self.affixed = null;
       }
     }
 
