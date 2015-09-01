@@ -1,5 +1,5 @@
 /* ========================================================================
- * This is a port for Mootools of Boostrap's affix.js jQuery plugin VERSION 3.3.5
+ * This is a port for Mootools of the original Boostrap affix.js jQuery plugin 3.3.5
  * TODO: add an acctual attribution msg
  * 
  * ======================================================================== */
@@ -11,23 +11,22 @@
     
     Implements: [Options, Events],
     
-    VERSION: '1.0.0',
+    VERSION: '3.3.5',
     
     options: {
       offset: 0,
       target: window
     },
 
-    initialize: function (element, _options) {
+    initialize: function (element, options) {
       var self = this;
 
-      self.setOptions(_options);
+      self.setOptions(options);
       
       self.$target = $(this.options.target);
       self.$target.addEvents({
         'scroll': self.checkPosition.bind(self),
-        'click': self.checkPositionWithEventLoop.bind(self),
-        'affix.disable': self.onDisabled.bind(self)
+        'click': self.checkPositionWithEventLoop.bind(self)
       });
 
       self.$element = document.getElement(element);
@@ -89,17 +88,13 @@
 
     checkPositionWithEventLoop: function () {
       var self = this;
-      setTimeout(self.checkPosition.bind(this), 1);
+      setTimeout(self.checkPosition.bind(this), 0);
     },
 
     checkPosition: function () {
       var self = this;
 
       if (!self.$element.isDisplayed()) {
-        return;
-      }
-
-      if (self.$element.hasClass('affix-disabled')) {
         return;
       }
 
@@ -148,18 +143,6 @@
       this.$element.removeClass('affix');
       this.$element.removeClass('affix-top');
       this.$element.removeClass('affix-bottom');
-    },
-
-    onDisabled: function(callback) {
-      var self = this;
-
-      if (typeof callback === 'function') {
-        callback();
-      } else {
-        self.$target.scrollTo(0, 0);
-        self.resetClasses();
-        self.affixed = null;
-      }
     }
 
   });
